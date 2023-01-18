@@ -13,7 +13,6 @@ namespace RepositoryPatternWithUOW.EF
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-
         public DbSet<Author> Author { get; set; }
         public DbSet<Book> Book { get; set; }
     }
