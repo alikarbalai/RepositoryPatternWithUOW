@@ -42,9 +42,9 @@ namespace RepositoryPatternWithUOW.Api.Controllers
             return Ok(_unitOfWork.Books.FindAll(b => b.Title.Contains("Book"), null, null, b => b.Id, OrderBy.Descending, new[] { "Author" }));
         }
         [HttpPost("AddOne")]
-        public IActionResult AddOne()
+        public IActionResult AddOne(Book entity)
         {
-            var book = _unitOfWork.Books.Add(new Book { Title = "test 445324324", AuthorId = 1 });
+            var book = _unitOfWork.Books.Add(new Book { Title = entity.Title, AuthorId = entity.AuthorId });
             _unitOfWork.Complete();
             return Ok(book);
         }

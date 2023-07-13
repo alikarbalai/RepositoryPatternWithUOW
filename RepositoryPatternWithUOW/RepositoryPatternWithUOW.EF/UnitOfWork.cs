@@ -16,12 +16,14 @@ namespace RepositoryPatternWithUOW.EF
 
         public IBaseRepository<Author> Authors { get; private set; }
         public IBooksRepository Books { get; private set; }
+        public IAuthServiceRepository authService { get; private set; }
 
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
             Authors = new BaseRepository<Author>(_context);
             Books = new BooksRepository(_context);
+            authService = new AuthServiceRepository();
         }
  
 

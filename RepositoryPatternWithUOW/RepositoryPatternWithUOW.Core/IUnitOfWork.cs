@@ -12,6 +12,7 @@ namespace RepositoryPatternWithUOW.Core
     {
         IBaseRepository<Author> Authors { get; }
         IBooksRepository Books { get; }
+        IAuthServiceRepository authService { get; }
         int Complete();
     }
 }

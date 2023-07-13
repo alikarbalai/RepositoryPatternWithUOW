@@ -57,7 +57,7 @@ namespace RepositoryPatternWithUOW.EF.Repositories
             _context.Set<T>().RemoveRange(entites);
         }
 
-        public T Find(Expression<Func<T, bool>> criteria, string[] includes = null)
+        public T Find(Expression<Func<T, bool>> criteria, string[]? includes = null)
         {
             IQueryable<T> query = _context.Set<T>();
             if (includes != null)
@@ -68,7 +68,7 @@ namespace RepositoryPatternWithUOW.EF.Repositories
             }
             return query.SingleOrDefault(criteria);
         }
-        public IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, string[] includes = null)
+        public IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, string[]? includes = null)
         {
             IQueryable<T> query = _context.Set<T>();
             if (includes != null)
@@ -86,7 +86,7 @@ namespace RepositoryPatternWithUOW.EF.Repositories
         }
        
         public IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, int? take, int? skip,
-      Expression<Func<T, object>> orderBy = null, string orderByDirection = OrderBy.Ascending, string[] includes = null)
+      Expression<Func<T, object>>? orderBy = null, string orderByDirection = OrderBy.Ascending, string[]? includes = null)
         {
             IQueryable<T> query = _context.Set<T>().Where(criteria);
             if(includes!=null)

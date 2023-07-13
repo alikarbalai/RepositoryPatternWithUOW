@@ -2,9 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\RepositoryPatternWithUOW",
-    "\\RepositoryPatternWithUOW\\RepositoryPatternWithUOW.Api",
     "\\RepositoryPatternWithUOW\\RepositoryPatternWithUOW.Api\\Controllers"
   ],
-  "SelectedNode": "\\RepositoryPatternWithUOW\\RepositoryPatternWithUOW.Api\\Controllers\\BooksController.cs",
+  "SelectedNode": "\\RepositoryPatternWithUOW",
   "PreviewInSolutionExplorer": false
 }
