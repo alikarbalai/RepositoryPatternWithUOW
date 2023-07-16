@@ -1,4 +1,7 @@
-﻿using RepositoryPatternWithUOW.Core;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
+using RepositoryPatternWithUOW.Core;
+using RepositoryPatternWithUOW.Core.Helpers;
 using RepositoryPatternWithUOW.Core.Interfaces;
 using RepositoryPatternWithUOW.Core.Models;
 using RepositoryPatternWithUOW.EF.Repositories;
@@ -17,13 +20,12 @@ namespace RepositoryPatternWithUOW.EF
         public IBaseRepository<Author> Authors { get; private set; }
         public IBooksRepository Books { get; private set; }
         public IAuthServiceRepository authService { get; private set; }
-
-        public UnitOfWork(ApplicationDbContext context)
+        public UnitOfWork(ApplicationDbContext context,UserManager<ApplicationUser> userManager,RoleManager<IdentityRole> roleManager, IOptions<JWT> jwt)
         {
             _context = context;
             Authors = new BaseRepository<Author>(_context);
             Books = new BooksRepository(_context);
-            authService = new AuthServiceRepository();
+            authService = new AuthServiceRepository(userManager, roleManager, jwt);
         }
  
 
