@@ -31,7 +31,6 @@ namespace RepositoryPatternWithUOW.EF.Repositories
                 return new AuthModel { Message = "Email is already registered!" };
             if (await _userManager.FindByNameAsync(model.Username) is not null)
                 return new AuthModel { Message = "Username is already registered!" };
-
             var user = new ApplicationUser
             {
                 UserName = model.Username,

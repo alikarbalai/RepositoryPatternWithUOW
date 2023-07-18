@@ -50,7 +50,6 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 app.UseHttpsRedirection();
 app.UseCors("CorsPolicy");
 app.UseAuthorization();
-app.UseAuthentication();
 app.UseStaticFiles();
 app.MapControllers();
 
