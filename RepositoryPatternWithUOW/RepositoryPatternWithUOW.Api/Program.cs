@@ -19,6 +19,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.ConfigureIISIntegration();
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.ConfigureRepositoryManager();
+builder.Services.AddAuthorization();
 builder.Services.ConfigureJWT(builder.Configuration);
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
@@ -49,6 +50,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 });
 app.UseHttpsRedirection();
 app.UseCors("CorsPolicy");
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseStaticFiles();
 app.MapControllers();

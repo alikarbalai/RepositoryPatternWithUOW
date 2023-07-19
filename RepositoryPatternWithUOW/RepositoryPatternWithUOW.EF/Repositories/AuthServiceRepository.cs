@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,6 +26,40 @@ namespace RepositoryPatternWithUOW.EF.Repositories
             _roleManager = roleManager;
             _jwt = jwt.Value;
         }
+
+        public async Task<string> AddRoleAsync(AddRoleModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            if (user is null || !await _roleManager.RoleExistsAsync(model.Role))
+                return "Invalid user ID or Role";
+            if (await _userManager.IsInRoleAsync(user, model.Role))
+                return "User already assigned to this role";
+            var result = await _userManager.AddToRoleAsync(user, model.Role);
+            return result.Succeeded ? string.Empty : "Sonething went wrong";
+        }
+
+        public async Task<AuthModel> GetTokenAsync(TokenRequestModel model)
+        {
+            var authModel = new AuthModel();
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user is null || !await _userManager.CheckPasswordAsync(user, model.Password))
+            {
+                authModel.Message = "Email or Password is incorrect!";
+                return authModel;
+            }
+            var jwtSecurityToken = await CreateJwtToken(user);
+            var rolesList = await _userManager.GetRolesAsync(user);
+
+            authModel.IsAuthenticated = true;
+            authModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            authModel.Email = user.Email;
+            authModel.Username = user.UserName;
+          //  authModel.ExpiresOn = jwtSecurityToken.ValidTo;
+            authModel.Roles = rolesList.ToList();
+
+            return authModel;
+        }
+
         public async Task<AuthModel> RegisterAsync(RegisterModel model)
         {
             if (await _userManager.FindByEmailAsync(model.Email) is not null)
@@ -55,7 +90,7 @@ namespace RepositoryPatternWithUOW.EF.Repositories
             return new AuthModel
             {
                 Email = user.Email,
-                ExpiresOn = jwtSecurityToken.ValidTo,
+               // ExpiresOn = jwtSecurityToken.ValidTo,
                 IsAuthenticated = true,
                 Roles = new List<string> { "User" },
                 Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
@@ -95,7 +130,21 @@ namespace RepositoryPatternWithUOW.EF.Repositories
             return jwtSecurityToken;
         }
 
+        private RefreshToken GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
 
+            using var generator = new RNGCryptoServiceProvider();
+
+            generator.GetBytes(randomNumber);
+
+            return new RefreshToken
+            {
+                Token = Convert.ToBase64String(randomNumber),
+                ExpiresOn = DateTime.UtcNow.AddDays(10),
+                CreatedOn = DateTime.UtcNow
+            };
+        }
 
     }
 }

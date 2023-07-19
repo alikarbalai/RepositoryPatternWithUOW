@@ -15,5 +15,7 @@ namespace RepositoryPatternWithUOW.Core.Models
 
         [Required, MaxLength(50)]
         public string? LastName { get; set; }
+
+        public List<RefreshToken>? RefreshTokens { get; set; }
     }
 }
